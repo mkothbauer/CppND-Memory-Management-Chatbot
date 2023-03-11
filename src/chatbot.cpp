@@ -1,4 +1,5 @@
 #include <iostream>
+#include <pthread.h>
 #include <random>
 #include <algorithm>
 #include <ctime>
@@ -44,6 +45,63 @@ ChatBot::~ChatBot()
 
 //// STUDENT CODE
 ////
+
+ChatBot::ChatBot(const ChatBot &source)
+{
+    std::cout << "ChatBot Copy Constructor" << std::endl;
+
+    if (source._image != NULL) {
+        _image = new wxBitmap(*source._image);
+    } else {
+        _image = source._image; // should be NULL
+    }
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+}
+
+ChatBot& ChatBot::operator=(const ChatBot &source)
+{
+    std::cout << "ChatBot Copy Assignment Operator" << std::endl;
+
+    if (this == &source) {
+        return *this;
+    }
+
+    if (source._image != NULL) {
+        if (_image != NULL) {
+            delete _image;
+        }
+        _image = new wxBitmap(*source._image);
+    } else {
+        _image = source._image; // should be NULL
+    }
+
+    _currentNode = source._currentNode;
+    _rootNode = source._rootNode;
+    _chatLogic = source._chatLogic;
+
+    return *this;
+}
+
+ChatBot::ChatBot(ChatBot&& source)
+{
+    std::cout << "ChatBot Move Constructor" << std::endl;
+    _chatLogic = std::move(source._chatLogic);
+    _currentNode = std::move(source._currentNode);
+    _rootNode = std::move(source._rootNode);
+    _image = std::move(source._image);
+}
+
+ChatBot &ChatBot::operator=(ChatBot&& source)
+{
+    std::cout << "ChatBot Move Assignment Operator" << std::endl;
+    _chatLogic = std::move(source._chatLogic);
+    _currentNode = std::move(source._currentNode);
+    _rootNode = std::move(source._rootNode);
+    _image = std::move(source._image);
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
